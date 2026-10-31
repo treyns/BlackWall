@@ -146,10 +146,12 @@ IMPORT_SOURCES = {
     "pinterest": "Pinterest",
 }
 IMPORT_MAX_HEIGHTS = [
+    (480, "480p"),
     (720, "720p"),
     (1080, "1080p"),
-    (1440, "1440p"),
-    (2160, "2160p"),
+    (1440, "1440p (2K)"),
+    (2160, "2160p (4K)"),
+    (4320, "4320p (8K)"),
 ]
 DEFAULT_IMPORT_MAX_HEIGHT = 1080
 
@@ -157,21 +159,30 @@ DEFAULT_IMPORT_MAX_HEIGHT = 1080
 # The key is the target video width; "original" means the source file itself.
 VIDEO_QUALITY_OPTIONS = [
     ("original", "Original"),
-    ("1080p", "1080p"),
-    ("720p", "720p"),
-    ("480p", "480p"),
+    ("4320p", "4320p (8K)"),
+    ("2160p", "2160p (4K)"),
+    ("1440p", "1440p (2K)"),
+    ("1080p", "1080p (Full HD)"),
+    ("720p", "720p (HD)"),
+    ("480p", "480p (SD)"),
 ]
 VIDEO_QUALITY_WIDTHS = {
     "original": 0,
+    "4320p": 7680,
+    "2160p": 3840,
+    "1440p": 2560,
     "1080p": 1920,
     "720p": 1280,
     "480p": 854,
 }
 VIDEO_QUALITY_LABELS = {
     "original": "Original",
-    "1080p": "1080p",
-    "720p": "720p",
-    "480p": "480p",
+    "4320p": "4320p (8K)",
+    "2160p": "2160p (4K)",
+    "1440p": "1440p (2K)",
+    "1080p": "1080p (Full HD)",
+    "720p": "720p (HD)",
+    "480p": "480p (SD)",
 }
 
 # --- Search categories (id, English label, provider query) -------------------

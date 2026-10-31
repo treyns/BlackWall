@@ -56,6 +56,15 @@ class LinkDetectionTests(unittest.TestCase):
         self.assertIsNotNone(link)
         self.assertEqual(link.video_id, "dQw4w9WgXcQ")
 
+    def test_quality_tiers_include_4k_and_2k(self) -> None:
+        from config.constants import VIDEO_QUALITY_OPTIONS, VIDEO_QUALITY_WIDTHS
+        keys = [key for key, _label in VIDEO_QUALITY_OPTIONS]
+        self.assertIn("4320p", keys)
+        self.assertIn("2160p", keys)
+        self.assertIn("1440p", keys)
+        self.assertEqual(VIDEO_QUALITY_WIDTHS["2160p"], 3840)
+        self.assertEqual(VIDEO_QUALITY_WIDTHS["1440p"], 2560)
+
     def test_not_a_link(self) -> None:
         self.assertIsNone(detect_link("https://example.com/video/123"))
         self.assertIsNone(detect_link(""))

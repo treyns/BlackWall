@@ -296,6 +296,10 @@ class MainWindow(QMainWindow):
         self.status_badge.setObjectName("Badge" if state == "ok" else "BadgeDim")
         refresh_widgets(self.status_badge)
         self.sidebar.set_status(tr(text), state)
+        self.sidebar.set_mode(
+            tr(PERFORMANCE_MODES[self.ctx.wallpaper.mode]["label"]),
+            self.ctx.wallpaper.fps_cap,
+        )
         if self._tray is not None:
             self._tray.update_state(
                 state == "paused",
