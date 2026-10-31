@@ -41,12 +41,20 @@ PINTEREST_RE = re.compile(
     r"|(?:https?://)?pin\.it/([A-Za-z0-9]+)",
     re.IGNORECASE,
 )
+STEAM_RE = re.compile(
+    r"(?:https?://)?(?:www\.)?steamcommunity\.com/"
+    r"(?:sharedfiles|workshop)/filedetails/?\?(?:[^#\s]*&)?id=(\d+)"
+    r"|steam://url/CommunityFilePage/(\d+)",
+    re.IGNORECASE,
+)
 
 
 def normalize_url(raw: str) -> str:
     text = str(raw or "").strip().strip("<>\"'")
     if not text:
         return ""
+    if re.match(r"^[a-z][a-z0-9+.-]*://", text, re.IGNORECASE):
+        return text
     if not re.match(r"^https?://", text, re.IGNORECASE):
         text = "https://" + text
     return text
@@ -68,6 +76,10 @@ def detect_link(raw: str) -> ImportLink | None:
     if match:
         video_id = next((group for group in match.groups() if group), "")
         return ImportLink("pinterest", video_id, normalize_url(match.group(0)))
+    match = STEAM_RE.search(text)
+    if match:
+        item_id = next((group for group in match.groups() if group), "")
+        return ImportLink("steam", item_id, normalize_url(match.group(0)))
     return None
 
 

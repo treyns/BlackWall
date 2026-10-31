@@ -41,7 +41,7 @@ log = get_logger("import-page")
 class ImportLinkPage(BasePage):
     PAGE_KEY = "import"
     TITLE = "Import by link"
-    SUBTITLE = "TikTok, YouTube and Pinterest videos as live wallpapers"
+    SUBTITLE = "TikTok, YouTube, Pinterest and Steam Workshop as live wallpapers"
 
     def __init__(self, ctx, parent: QWidget | None = None) -> None:
         super().__init__(ctx, parent)
@@ -98,6 +98,13 @@ class ImportLinkPage(BasePage):
         link_card.body.addWidget(caption(tr(
             "Audio is preserved in imported videos; enable it in the wallpaper "
             "settings on the Home page.")))
+        self.steam_hint = caption(tr(
+            "Steam Workshop: subscribe and download the item in Steam, then press "
+            "Import. BlackWall imports local video/image files from the Workshop "
+            "cache; scene .pkg files are not supported."))
+        self.steam_hint.setWordWrap(True)
+        self.steam_hint.hide()
+        link_card.body.addWidget(self.steam_hint)
         self.root.addWidget(link_card)
 
         # ---------------------------------------------------------------- preview
@@ -265,12 +272,24 @@ class ImportLinkPage(BasePage):
 
     def _set_busy(self, busy: bool) -> None:
         self.import_button.setEnabled(bool(self._info) and not busy)
-        self.import_button.setText(tr("Importing…") if busy else tr("Import"))
+        if busy:
+            self.import_button.setText(tr("Importing…"))
+        else:
+            self.import_button.setText(self._idle_import_label())
+
+    def _idle_import_label(self) -> str:
+        if self._info is not None and self._info.source == "steam":
+            return tr("Import from Steam")
+        return tr("Import")
 
     def _on_info_ready(self, info) -> None:
         if not isinstance(info, LinkInfo):
             return
         self._info = info
+        is_steam = info.source == "steam"
+        self.steam_hint.setVisible(is_steam)
+        self.open_source_button.setText(
+            tr("Open in Steam") if is_steam else tr("Open source page"))
         self.info_title.setText(info.title or tr("Video"))
         self.info_author.setText(tr("Author: {author}", author=info.author) if info.author
                                  else "")
@@ -283,12 +302,15 @@ class ImportLinkPage(BasePage):
             parts.append(f"{info.fps:.0f} FPS")
         parts.append(tr(IMPORT_SOURCES.get(info.source, info.source)))
         self.info_meta.setText(" · ".join(part for part in parts if part))
-        self.info_status.setText(tr("Ready to import"))
+        self.info_status.setText(
+            tr("Download in Steam, then press Import") if is_steam
+            else tr("Ready to import"))
         if info.thumbnail_path and os.path.exists(info.thumbnail_path):
             self.preview.set_source(info.thumbnail_path, key=f"import:{info.source}:"
                                                              f"{info.video_id}")
         self.preview_card.show()
         self.import_button.setEnabled(True)
+        self.import_button.setText(self._idle_import_label())
         self.progress_card.hide()
         self.error_card.hide()
 
@@ -296,6 +318,7 @@ class ImportLinkPage(BasePage):
         self._info = None
         self.import_button.setEnabled(False)
         self.preview_card.hide()
+        self.steam_hint.hide()
         self.info_status.setText("")
         self._show_error(tr(message))
 
@@ -355,7 +378,7 @@ class ImportLinkPage(BasePage):
     def _start_import(self) -> None:
         url = self._url()
         if detect_link(url) is None:
-            self._show_error(tr("Paste a link to a TikTok, YouTube or Pinterest video"))
+            self._show_error(tr("Paste a supported video or Steam Workshop link"))
             return
         if self.ctx.imports.busy:
             self._show_error(tr("Another import is already running"))
@@ -382,6 +405,9 @@ class ImportLinkPage(BasePage):
         url = ""
         if self._info is not None:
             url = self._info.webpage_url or self._info.url
+            if self._info.source == "steam" and self._info.video_id:
+                utils.open_url(f"steam://url/CommunityFilePage/{self._info.video_id}")
+                return
         if not url:
             link = detect_link(self._url())
             url = self._url() if link is not None else ""

@@ -51,6 +51,18 @@ class LinkDetectionTests(unittest.TestCase):
             self.assertEqual(link.source, "pinterest")
             self.assertEqual(link.video_id, expected)
 
+    def test_steam_workshop_variants(self) -> None:
+        cases = {
+            "https://steamcommunity.com/sharedfiles/filedetails/?id=3820704938": "3820704938",
+            "https://steamcommunity.com/workshop/filedetails/?id=3820704938": "3820704938",
+            "steam://url/CommunityFilePage/3820704938": "3820704938",
+        }
+        for text, expected in cases.items():
+            link = detect_link(text)
+            self.assertIsNotNone(link, text)
+            self.assertEqual(link.source, "steam")
+            self.assertEqual(link.video_id, expected)
+
     def test_pasted_text_with_link(self) -> None:
         link = detect_link("look at this https://youtu.be/dQw4w9WgXcQ cool")
         self.assertIsNotNone(link)

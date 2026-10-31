@@ -33,6 +33,7 @@ from importers.processing import (
     target_dimensions,
 )
 from importers.pinterest import PinterestProvider
+from importers.steam import SteamWorkshopProvider
 from importers.tiktok import TikTokProvider
 from importers.youtube import YouTubeProvider
 
@@ -61,6 +62,7 @@ class ImportManager(QObject):
             "youtube": YouTubeProvider(),
             "tiktok": TikTokProvider(),
             "pinterest": PinterestProvider(),
+            "steam": SteamWorkshopProvider(),
         }
         self._cancel = threading.Event()
         self._busy = False

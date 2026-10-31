@@ -144,6 +144,7 @@ IMPORT_SOURCES = {
     "youtube": "YouTube",
     "tiktok": "TikTok",
     "pinterest": "Pinterest",
+    "steam": "Steam Workshop",
 }
 IMPORT_MAX_HEIGHTS = [
     (480, "480p"),
