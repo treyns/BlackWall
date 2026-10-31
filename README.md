@@ -1,5 +1,7 @@
 # BlackWall — живые обои для Windows 10
 
+**GitHub:** https://github.com/treyns/BlackWall
+
 BlackWall — лёгкое приложение для поиска, скачивания, хранения и установки живых обоев
 на рабочий стол Windows. Задумано как альтернатива Wallpaper Engine для слабых ПК:
 кадры рисуются прямо в слое рабочего стола (WorkerW), без браузера и лишних процессов,
@@ -89,14 +91,14 @@ run.bat
 или вручную:
 
 ```bat
-cd C:\Users\ivano\Documents\BlackWall
-"C:\Users\ivano\AppData\Local\Python\pythoncore-3.15-64\python.exe" main.py
+cd C:\path\to\BlackWall
+python main.py
 ```
 
 Если зависимости не установлены:
 
 ```bat
-"C:\Users\ivano\AppData\Local\Python\pythoncore-3.15-64\python.exe" -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 Приложение использует Python 3.15 и PySide6 6.12 (проверено на этой машине).
@@ -156,7 +158,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build_windows.ps1
 ## Тесты
 
 ```bat
-"C:\Users\ivano\AppData\Local\Python\pythoncore-3.15-64\python.exe" -m unittest discover -s tests -v
+python -m unittest discover -s tests -v
 ```
 
 Сейчас проходят 53 юнит-теста (база данных, настройки, модели, i18n, утилиты,
