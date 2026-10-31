@@ -6,14 +6,21 @@ installation can be copied or removed as one folder.
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
-APP_ROOT = Path(__file__).resolve().parent.parent
+if getattr(sys, "frozen", False):
+    # Packaged BlackWall.exe: keep user data next to the executable, while
+    # read-only assets are unpacked by PyInstaller into _MEIPASS.
+    APP_ROOT = Path(sys.executable).resolve().parent
+    ASSETS_DIR = Path(getattr(sys, "_MEIPASS", APP_ROOT)) / "assets"
+else:
+    APP_ROOT = Path(__file__).resolve().parent.parent
+    ASSETS_DIR = APP_ROOT / "assets"
 
 DATA_DIR = APP_ROOT / "data"
 CACHE_DIR = APP_ROOT / "cache"
 LOGS_DIR = APP_ROOT / "logs"
-ASSETS_DIR = APP_ROOT / "assets"
 MEDIA_DIR = APP_ROOT / "media"
 
 THUMBNAILS_DIR = CACHE_DIR / "thumbnails"

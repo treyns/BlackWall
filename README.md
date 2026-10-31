@@ -104,17 +104,17 @@ cd C:\Users\ivano\Documents\BlackWall
 
 ### Почему в диспетчере задач видно «Python», а не BlackWall
 
-Приложение запускается через `pythonw.exe`, поэтому Windows показывает процесс
-как Python. Чтобы процесс и ярлык назывались **BlackWall**, выполните один раз:
+Исходная версия запускалась через `pythonw.exe`, поэтому Windows показывала процесс
+как Python. Сейчас приложение собрано как отдельный **`BlackWall.exe`** — именно он
+и указан в ярлыке, поэтому в диспетчере задач отображается **BlackWall.exe**.
+Для сборки на другой машине:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\create_launcher.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\build_windows.ps1
 ```
 
-Скрипт создаёт рядом с Python файл `BlackWall.exe` (жёсткую ссылку на
-`pythonw.exe`) и обновляет ярлык на рабочем столе. После этого в диспетчере
-задач приложение отображается как **BlackWall.exe**, а автозапуск использует тот
-же лаунчер.
+Готовый exe будет лежать в корне проекта. Для запуска из исходников всё ещё можно
+использовать `run.bat` или Python; тогда процесс будет называться Python.
 
 ## Первый запуск
 

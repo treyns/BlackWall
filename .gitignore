@@ -13,6 +13,7 @@ venv/
 build/
 dist/
 *.spec
+BlackWall.exe
 *.zip
 .env
 .DS_Store
