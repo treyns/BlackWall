@@ -1,0 +1,22 @@
+# BlackWall — local runtime and personal data.
+# Never commit downloaded wallpapers, the library database, backups or API keys.
+data/
+media/
+backups/
+cache/
+logs/
+__pycache__/
+*.py[cod]
+*.log
+.venv/
+venv/
+build/
+dist/
+*.spec
+*.zip
+.env
+.DS_Store
+Thumbs.db
+
+# Developer-only screenshots, temporary test media and local diagnostics.
+scripts/dev/
